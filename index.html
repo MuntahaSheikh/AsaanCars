@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select, .form-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .form-group button {
+            background-color: #32cd32;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Dynamic Ride Booking Form</h1>
+        <form id="rideForm">
+            <div class="form-group">
+                <label for="rideType">Ride Type:</label>
+                <select id="rideType" name="rideType">
+                    <option value="Private Ride">Private Ride</option>
+                    <option value="Shared Ride">Shared Ride</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fromCity">From City:</label>
+                <input type="text" id="fromCity" name="fromCity" placeholder="Enter pickup city" required>
+            </div>
+            <div class="form-group">
+                <label for="toCity">To City:</label>
+                <input type="text" id="toCity" name="toCity" placeholder="Enter destination city" required>
+            </div>
+            <div class="form-group">
+                <label for="dateTime">Date & Time:</label>
+                <input type="datetime-local" id="dateTime" name="dateTime" required>
+            </div>
+            <div class="form-group">
+                <label for="passengers">Number of Passengers:</label>
+                <input type="number" id="passengers" name="passengers" min="1" value="1" required>
+            </div>
+            <div class="form-group">
+                <label for="fare">Offer Your Fare (Optional):</label>
+                <input type="text" id="fare" name="fare" placeholder="Enter fare">
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="submitForm()">Find a Driver</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            const formData = new FormData(document.getElementById('rideForm'));
+            const data = {};
+            formData.forEach((value, key) => (data[key] = value));
+
+            // Send data to the backend via a POST request
+            fetch('backend.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.text())
+            .then(result => alert(`Response from backend: ${result}`))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
